@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 // Connect DB
 mongoose.connect("mongodb://127.0.0.1:27017/bookshop").then(() => console.log("Connect to DB successfully"))
 // Router
-app.use('/api', router)
+app.use('', router)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
