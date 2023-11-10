@@ -5,7 +5,7 @@ export const getAuthors = async (req, res) => {
     try {
         const data = await Authors.find()
         if (data.length === 0) {
-            res.status(300).json({
+            return res.status(300).json({
                 message: "Danh sách tác giả trống"
             })
         }
@@ -27,7 +27,7 @@ export const getAuthorById = async (req, res) => {
         const data = await Authors.findById(id)
         // Kiểm tra xem id có tồn tại không
         if (!data) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'Tác giả không tồn tại'
             })
         }
@@ -112,7 +112,7 @@ export const removeAuthor = async (req, res) => {
         const data = await Authors.findByIdAndDelete(id)
         // Kiểm tra xem id có tồn tại không
         if (!data) {
-            res.status(404).json({
+            return res.status(404).json({
                 message: 'Tác giả không tồn tại'
             })
         }
