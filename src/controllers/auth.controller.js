@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Users from "../models/user.model";
-import { registerSchema, loginSchema, changePasswordSchema } from "../schema/auth.validate";
+import { registerSchema, loginSchema, changePasswordSchema } from "../schema/auth.schema";
 
 export const register = async (req, res) => {
     try {
@@ -39,7 +39,7 @@ export const register = async (req, res) => {
             phone: phone,
             password: hashedPassword
         })
-        res.status(201).json({ message: 'Đăng ký tài khoản thành công' })
+        return res.status(201).json({ message: 'Đăng ký tài khoản thành công' })
     } catch (error) {
         return res.status(400).json({
             message: error.message
@@ -69,7 +69,7 @@ export const login = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user._id }, '123456', { expiresIn: '1h' })
-        res.status(200).json({ message: 'Đăng nhập thành công', token })
+        return res.status(200).json({ message: 'Đăng nhập thành công', token })
     } catch (error) {
         return res.status(400).json({
             message: error.message
@@ -105,7 +105,7 @@ export const changePassword = async (req, res) => {
         const hashedPassword = await bcrypt.hash(newPassword, 10)
 
         await Users.updateOne({ _id: userId }, { password: hashedPassword })
-        res.status(200).json({
+        return res.status(200).json({
             message: 'Thay đổi mật khẩu thành công'
         })
     } catch (error) {

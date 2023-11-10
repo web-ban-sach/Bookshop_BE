@@ -1,6 +1,8 @@
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
+import dotenv from 'dotenv'
+dotenv.config()
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,
