@@ -14,12 +14,6 @@ const bookDetailSchema = new mongoose.Schema(
             autopopulate: { select: "author_name" },
             require: true
         },
-        image_id: {
-            type: mongoose.Types.ObjectId,
-            ref: "Image",
-            autopopulate: { select: "image_url" },
-            require: true
-        },
         quantity: {
             type: Number,
             require: true

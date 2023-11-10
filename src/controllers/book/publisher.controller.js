@@ -1,5 +1,5 @@
 import Publisher from "../../models/book/publisher.model";
-import { publisherSchema } from "../../schema/book.schema";
+import { publisherSchema } from "../../helper/book.schema";
 
 export const getPublishers = async (req, res) => {
     try {

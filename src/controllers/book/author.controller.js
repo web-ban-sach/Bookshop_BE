@@ -1,5 +1,5 @@
 import Authors from "../../models/book/author.model";
-import { authorSchema } from "../../schema/book.schema";
+import { authorSchema } from "../../helper/book.schema";
 
 export const getAuthors = async (req, res) => {
     try {

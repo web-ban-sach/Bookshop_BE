@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Users from "../models/user.model";
-import { registerSchema, loginSchema, changePasswordSchema } from "../schema/auth.schema";
+import { registerSchema, loginSchema, changePasswordSchema } from "../helper/auth.schema";
 
 export const register = async (req, res) => {
     try {

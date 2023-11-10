@@ -1,5 +1,5 @@
 import Category from "../../models/book/category.model"
-import { categorySchema } from "../../schema/book.schema";
+import { categorySchema } from "../../helper/book.schema";
 
 export const getCategories = async (req, res) => {
     try {
