@@ -1,11 +1,11 @@
 import express from "express";
-import { register, login, changePassword } from "../controllers/auth.controller";
+import * as controllers from "../controllers/auth.controller";
 import { authenticateToken } from "../middlewares/authenticateToken";
 
 const authRouter = express.Router()
 
-authRouter.post("/login", login)
-authRouter.post("/register", register)
-authRouter.put("/change-password/:id", authenticateToken, changePassword)
+authRouter.post("/login", controllers.login)
+authRouter.post("/register", controllers.register)
+authRouter.put("/change-password/:id", authenticateToken, controllers.changePassword)
 
 export default authRouter

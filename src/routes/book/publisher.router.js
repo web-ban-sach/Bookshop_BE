@@ -1,12 +1,12 @@
 import express from 'express'
-import { getPublishers, getPublisherById, addPublisher, updatePublisher, removePublisher } from '../../controllers/book/publisher.controller'
+import * as controllers from '../../controllers/book/publisher.controller'
 
 const publisherRouter = express.Router()
 
-publisherRouter.get("/", getPublishers)
-publisherRouter.get("/:id", getPublisherById)
-publisherRouter.post("/add", addPublisher)
-publisherRouter.put("/update/:id", updatePublisher)
-publisherRouter.delete("/remove/:id", removePublisher)
+publisherRouter.get("/", controllers.getPublishers)
+publisherRouter.get("/:id", controllers.getPublisherById)
+publisherRouter.post("/add", controllers.addPublisher)
+publisherRouter.put("/update/:id", controllers.updatePublisher)
+publisherRouter.delete("/remove/:id", controllers.removePublisher)
 
 export default publisherRouter

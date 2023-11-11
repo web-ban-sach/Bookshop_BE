@@ -65,10 +65,6 @@ export const bookDeltailSchema = Joi.object({
         "string.empty": "Id tác giả không được bỏ trống",
         "any.required": "Id tác giả là bắt buộc",
     })).required(),
-    image_id: Joi.array().items(Joi.string().messages({
-        "string.empty": "Id tác giả không được bỏ trống",
-        "any.required": "Id tác giả là bắt buộc",
-    })).required(),
     quantity: Joi.number().min(0).required().messages({
         "string.empty": "Số lượng sách không được để trống",
         "string.min": "Số lượng sách phải lớn hơn 0",
