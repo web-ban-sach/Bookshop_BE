@@ -9,7 +9,7 @@ const bookDetailSchema = new mongoose.Schema(
             autopopulate: { select: "book_title" }
         },
         author_id: {
-            type: mongoose.Types.ObjectId,
+            type: [mongoose.Types.ObjectId],
             ref: "Author",
             autopopulate: { select: "author_name" },
             require: true
