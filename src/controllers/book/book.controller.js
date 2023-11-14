@@ -1,7 +1,11 @@
 import Book from '../../models/book/book.model'
 import BookDetail from '../../models/book/bookDetail.model'
+import Category from "../../models/book/category.model";
+import Author from "../../models/book/author.model";
 import { bookSchema, bookDeltailSchema } from '../../helper/book.schema';
 import { v2 as cloudinary } from 'cloudinary';
+import { query } from 'express';
+import unidecode from 'unidecode';
 
 export const createBook = async (req, res) => {
     let fileData
@@ -305,4 +309,36 @@ export const removeBookDetail = async (req, res) => {
             message: error.message
         })
     }
+}
+
+export const searchBook = async (req, res) => {
+    const { searchQuery } = req.query;
+
+    if (!searchQuery) {
+        return res.status(400).json({ error: 'Missing query parameter' });
+    }
+    const data = await BookDetail.find()
+
+    const result = data.filter(item => {
+        // Kiểm tra xem thuộc tính book_id và book_title có tồn tại không
+        if (item && item.book_id && item.book_id.book_title) {
+            // Sử dụng unidecode để chuyển đổi ký tự có dấu thành không dấu
+            const titleWithoutDiacritics = unidecode(item.book_id.book_title);
+
+            // Kiểm tra xem có khớp với book_title không
+            const titleMatch = titleWithoutDiacritics.toLowerCase().includes(searchQuery.toLowerCase());
+
+            // Kiểm tra xem có khớp với category_name hoặc author_name không
+            const categoryMatch = item.book_id.category_id.category_name.toLowerCase().includes(searchQuery.toLowerCase());
+            const authorMatch = item.author_id.some(author =>
+                unidecode(author.author_name).toLowerCase().includes(searchQuery.toLowerCase())
+            );
+
+            // Trả về true nếu có bất kỳ sự khớp nào
+            return titleMatch || categoryMatch || authorMatch;
+        }
+        return false; // Trả về false nếu không tìm thấy thuộc tính hoặc nếu nó là null/undefined
+    });
+
+    res.json(result);
 }
