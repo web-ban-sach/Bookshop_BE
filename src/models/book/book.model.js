@@ -16,6 +16,12 @@ const bookSchema = new mongoose.Schema(
             ref: "Category",
             autopopulate: { select: "category_name" },
         },
+        author_id: {
+            type: [mongoose.Types.ObjectId],
+            ref: "Author",
+            autopopulate: { select: "author_name" },
+            require: true
+        },
         publisher_id: {
             type: mongoose.Types.ObjectId,
             ref: "Publisher",
@@ -24,6 +30,17 @@ const bookSchema = new mongoose.Schema(
         thumbnail: {
             type: String,
             require: true
+        },
+        quantity: {
+            type: Number,
+            require: true
+        },
+        price: {
+            type: Number,
+            require: true
+        },
+        sale: {
+            type: Number
         }
     },
     {

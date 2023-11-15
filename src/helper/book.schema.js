@@ -53,13 +53,6 @@ export const bookSchema = Joi.object({
     thumbnail: Joi.string().required().messages({
         "string.empty": "Ảnh về sách không được bỏ trống",
         "any.required": "Ảnh về sách là bắt buộc",
-    })
-})
-
-export const bookDeltailSchema = Joi.object({
-    book_id: Joi.string().required().messages({
-        "string.empty": "Id thể loại sách không được bỏ trống",
-        "any.required": "Id thể loại sách là bắt buộc",
     }),
     author_id: Joi.array().items(Joi.string().messages({
         "string.empty": "Id tác giả không được bỏ trống",

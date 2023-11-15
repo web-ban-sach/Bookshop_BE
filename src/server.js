@@ -9,7 +9,8 @@ dotenv.config()
 const app = express()
 // Middlewave
 app.use(cors({
-    origin: process.env.CLIENT_URL
+    origin: process.env.CLIENT_URL,
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 }))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
