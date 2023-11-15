@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
         },
         address: {
             type: String,
-            require: true
         },
         avatar: {
             type: String
@@ -34,7 +33,6 @@ const userSchema = new mongoose.Schema(
         },
         phone: {
             type: String,
-            require: true
         }
     },
     {

@@ -112,3 +112,19 @@ export const changePassword = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+export const decodeToken = async (req, res) => {
+    try {
+        const { token } = req.query
+        const decode = jwt.decode(token)
+
+        const user = await Users.findById(decode.userId)
+        return res.status(200).json({
+            data: user
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}

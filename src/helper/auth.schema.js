@@ -15,11 +15,6 @@ export const registerSchema = Joi.object({
         "any.required": "Email là bắt buộc",
         "string.email": "Email không hợp lệ"
     }),
-    phone: Joi.string().required().pattern(new RegExp(/^((\+84)|0)[35789]\d{8}$/)).messages({
-        "string.empty": "SDT không được để trống",
-        "any.required": "SDT là bắt buộc",
-        "string.pattern.base": "SDT không hợp lệ",
-    }),
     password: Joi.string().required().min(6).messages({
         "string.empty": "Mật khẩu không được để trống",
         "string.min": "Mật khẩu phải có ít nhất {#limit} ký tự",
