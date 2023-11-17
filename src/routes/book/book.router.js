@@ -5,10 +5,10 @@ import uploadCloud from "../../middlewares/uploadCloud"
 const bookRouter = express.Router()
 
 // router book
-bookRouter.post("/add", uploadCloud.single('thumbnail'), controllers.createBook)
+bookRouter.post("/add", controllers.createBook)
 bookRouter.get("/read", controllers.getBooks)
 bookRouter.get("/read/:id", controllers.getBookById)
-bookRouter.put("/update/:id", uploadCloud.single('thumbnail'), controllers.updateBook)
+bookRouter.put("/update/:id", controllers.updateBook)
 bookRouter.delete("/remove/:id", controllers.removeBook)
 
 // router search book

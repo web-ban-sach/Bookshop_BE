@@ -63,7 +63,7 @@ export const bookSchema = Joi.object({
         "string.min": "Số lượng sách phải lớn hơn 0",
         "any.required": "Số lượng sách là bắt buộc",
     }),
-    price: Joi.number().min(0).required().messages({
+    old_price: Joi.number().min(0).required().messages({
         "string.empty": "Giá không được để trống",
         "string.min": "Giá phải lớn hơn 0",
         "any.required": "Giá là bắt buộc",

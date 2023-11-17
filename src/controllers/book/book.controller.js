@@ -4,29 +4,28 @@ import { v2 as cloudinary } from 'cloudinary';
 import unidecode from 'unidecode';
 
 export const createBook = async (req, res) => {
-    let fileData
     try {
-        fileData = req.file
-        const { book_title, description, author_id, category_id, publisher_id, thumbnail, quantity, price, sale } = req.body
-        const { error } = await bookSchema.validateAsync({ ...req.body, thumbnail: fileData?.path }, { abortEarly: false })
+        const { book_title, description, author_id, category_id, publisher_id, thumbnail, quantity, old_price, sale } = req.body
+        const { error } = await bookSchema.validateAsync(req.body, { abortEarly: false })
+
         if (error) {
-            if (fileData) {
-                cloudinary.uploader.destroy(fileData.filename)
-            }
             return res.status(400).json({
                 message: error.details[0].message
             })
         }
+        const discounted = old_price - (old_price * sale) / 100;
+        const new_price = Math.floor(discounted);
 
         const book = await Book.create({
             book_title: book_title,
             description: description,
             category_id: category_id,
             publisher_id: publisher_id,
-            thumbnail: fileData?.path,
+            thumbnail: thumbnail,
             author_id: author_id,
             quantity: quantity,
-            price: price,
+            old_price: old_price,
+            new_price: new_price,
             sale: sale
         })
         if (!book) {
@@ -39,9 +38,6 @@ export const createBook = async (req, res) => {
             message: 'Thêm sách thành công'
         })
     } catch (error) {
-        if (fileData) {
-            cloudinary.uploader.destroy(fileData.filename)
-        }
         res.status(500).json({
             message: error.message
         })
@@ -88,11 +84,9 @@ export const getBookById = async (req, res) => {
 }
 
 export const updateBook = async (req, res) => {
-    let fileData
     try {
         const book_id = req.params.id
         const bookInfo = await Book.findById(book_id)
-        fileData = req.file
         if (!bookInfo) {
             return res.status(400).json({
                 message: "Sách không tồn tại"
@@ -105,25 +99,22 @@ export const updateBook = async (req, res) => {
         const publisher_id = req.body.publisher_id || bookInfo.publisher_id._id.toString();
         const author_id = req.body.author_id || bookInfo.author_id.map(author => author._id.toString())
         const quantity = req.body.quantity || bookInfo.quantity
-        const price = req.body.price || bookInfo.price
+        const old_price = req.body.old_price || bookInfo.old_price
         const sale = req.body.sale || bookInfo.sale
+        const thumbnail = req.body.thumbnail || bookInfo.thumbnail
 
-        let thumbnail = bookInfo.thumbnail // Giữ nguyên thumbnail cũ
-        if (fileData) {
-            thumbnail = fileData.path // Sử dụng thumbnail mới nếu có
-        }
         const { error } = await bookSchema.validateAsync(
-            { book_title, description, category_id, publisher_id, thumbnail, author_id, quantity, price, sale },
+            { book_title, description, category_id, publisher_id, thumbnail, author_id, quantity, old_price, sale },
             { abortEarly: false }
         )
         if (error) {
-            if (fileData) {
-                cloudinary.uploader.destroy(fileData.filename)
-            }
             return res.status(400).json({
                 message: error.details[0].message
             })
         }
+
+        const discounted = old_price - (old_price * sale) / 100;
+        const new_price = Math.floor(discounted);
 
         const updateBook = await Book.findByIdAndUpdate(
             book_id,
@@ -135,7 +126,8 @@ export const updateBook = async (req, res) => {
                 thumbnail: thumbnail,
                 author_id: author_id,
                 quantity: quantity,
-                price: price,
+                old_price: old_price,
+                new_price: new_price,
                 sale: sale
             }
         )
@@ -150,9 +142,6 @@ export const updateBook = async (req, res) => {
             message: 'Cập nhật sách thành công'
         })
     } catch (error) {
-        if (fileData) {
-            cloudinary.uploader.destroy(fileData.filename)
-        }
         res.status(500).json({
             message: error.message
         })
