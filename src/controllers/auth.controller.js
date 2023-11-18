@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Users from "../models/user.model";
-import { registerSchema, loginSchema, changePasswordSchema } from "../helper/auth.schema";
+import { registerSchema, loginSchema, changePasswordSchema, changeInfoSchema } from "../helper/auth.schema";
 
 export const register = async (req, res) => {
     try {
@@ -107,6 +107,43 @@ export const changePassword = async (req, res) => {
         await Users.updateOne({ _id: userId }, { password: hashedPassword })
         return res.status(200).json({
             message: 'Thay đổi mật khẩu thành công'
+        })
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
+
+export const changeInfo = async (req, res) => {
+    try {
+        const userId = req.params.id
+
+        // Kiểm tra xem mật khẩu hiện tại có khớp với mật khẩu của người dùng hay không
+        const user = await Users.findById(userId)
+        if (!user) {
+            return res.status(404).json({ message: 'Người dùng không tồn tại' })
+        }
+
+        const fullname = req.body?.fullname || user?.fullname
+        const address = req.body?.address || user?.address
+        const avatar = req.body?.avatar || user?.avatar
+        const phone = req.body?.phone || user?.phone
+
+
+        const { error } = await changeInfoSchema.validateAsync({ fullname, address, avatar, phone }, { abortEarly: false })
+        if (error) {
+            const errors = error.details.map((err) => err.message);
+            return res.status(400).json({
+                message: errors,
+            });
+        }
+
+        await Users.updateOne({ _id: userId }, { fullname, address, avatar, phone }).catch(errors => {
+            return res.status(400).json({
+                message: errors.message,
+            })
+        })
+        return res.status(200).json({
+            message: 'Thay đổi thông tin người dùng thành công'
         })
     } catch (error) {
         res.status(500).json({ message: error.message });

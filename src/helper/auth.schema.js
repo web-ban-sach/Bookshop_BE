@@ -52,3 +52,13 @@ export const changePasswordSchema = Joi.object({
         "any.required": "Mật khẩu mới không được bỏ trống",
     })
 })
+
+export const changeInfoSchema = Joi.object({
+    fullname: Joi.string(),
+    address: Joi.string(),
+    avatar: Joi.string(),
+    phone: Joi.string().pattern(new RegExp(/^((\+84)|0)[35789]\d{8}$/))
+        .messages({
+            "string.pattern.base": "SDT không hợp lệ",
+        }),
+})
